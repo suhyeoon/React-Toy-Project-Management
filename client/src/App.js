@@ -20,6 +20,20 @@ const styles = theme => ({
 });
 
 class App extends Component {
+
+  state = {
+    customers: ""
+  }
+
+  componentDidMount() {
+    this.callApi();
+  }
+
+  callApi = async () => {
+    const response = await fetch('/api/customers');
+    const body = await response.json();
+  }
+
   render() {
     const { classes } = this.props;
     return (
@@ -35,8 +49,8 @@ class App extends Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {
-              customer.map(c => {
+            {this.state.customers ? // 값이 존재하는 경우 실행 
+              this.state.customer.map(c => {
                 return (
                   <Customer
                     key={c.id}
@@ -48,6 +62,7 @@ class App extends Component {
                   />
                 );
               })
+              : "" //참이 아닐 경우 공백
             }
           </TableBody>
         </Table>
