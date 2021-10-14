@@ -7,6 +7,7 @@ import TableHead from '@mui/material/TableHead';
 import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
+import CircularProgress from '@mui/material/CircularProgress';
 import { withStyles } from '@mui/styles';
 
 const styles = theme => ({
@@ -16,22 +17,32 @@ const styles = theme => ({
   },
   table: {
     minWidth: 1080
+  },
+  progress: {
+    margin: theme.spacing.unit * 2
   }
 });
 
 class App extends Component {
 
   state = {
-    customers: ""
+    customers: "",
+    completed: 0
   }
 
   componentDidMount() {
+    this.timer = setInterval(this.progress, 20);
     this.callApi();
   }
 
   callApi = async () => {
     const response = await fetch('/api/customers');
     const body = await response.json();
+  }
+
+  progress = () => {
+    const { completed } = this.state;
+    this.setState({ completed: completed >= 100 ? 0 : completed + 1 });
   }
 
   render() {
@@ -71,3 +82,19 @@ class App extends Component {
   }
 }
 export default withStyles(styles)(App);
+
+let input = [];
+rl.on('line', function (line) {
+  input.push(parseInt(line));
+}).on('close', function () {
+  const X = input[0];
+  const Y = input[1];
+
+  if (X > 0) {
+    console.log(Y > 0 ? 1 : 4);
+  } else {
+    console.log(Y > 0 ? 2 : 3);
+  }
+
+  process.exit();
+});
